@@ -1,5 +1,8 @@
 import styled from "styled-components";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faMoon } from "@fortawesome/free-solid-svg-icons";
+
 const HeaderContainer = styled.div`
   background-color: ${({ theme }) => theme.headerBackground};
   display: flex;
@@ -21,14 +24,28 @@ const Logo = styled.span`
   font-weight: 800;
 `;
 
-const ThemeSwitchButton = styled.div``;
+const ThemeSwitchButton = styled.div`
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+const ThemeSwitchButtonText = styled.span`
+  margin-left: 0.4rem;
+`;
 
 export default function Header({ setTheme }) {
   return (
     <HeaderContainer>
       <HeaderInnerContainer>
         <Logo>Where in the world?</Logo>
-        <ThemeSwitchButton onClick={setTheme}>Dark mode</ThemeSwitchButton>
+        <ThemeSwitchButton onClick={setTheme}>
+          <FontAwesomeIcon icon={faMoon} />
+          <ThemeSwitchButtonText>Dark mode</ThemeSwitchButtonText>
+        </ThemeSwitchButton>
       </HeaderInnerContainer>
     </HeaderContainer>
   );

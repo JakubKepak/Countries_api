@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 const MainContainer = styled.div`
   width: 100%;
@@ -16,6 +19,11 @@ const NavigationContainer = styled.div`
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+  align-items: center;
+`;
+
+const SearchBarContainer = styled.div`
+  position: relative;
 `;
 
 const SearchBar = styled.input`
@@ -25,10 +33,29 @@ const SearchBar = styled.input`
   width: 20rem;
   box-shadow: 3px 4px 5px 1px rgba(0, 0, 0, 0.1);
   font-family: inherit;
+  border-radius: 5px;
+  background-color: ${({ theme }) => theme.headerBackground};
+  color: ${({ theme }) => theme.mainTextColor};
+
+  &::placeholder {
+    color: ${({ theme }) => theme.mainTextColor};
+  }
 
   &:focus {
     outline: none;
   }
+`;
+
+const SearchBarIconContainer = styled.span`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 20%;
+  color: ${({ theme }) => theme.mainTextColor};
 `;
 
 const Filter = styled.div`
@@ -36,14 +63,45 @@ const Filter = styled.div`
   display: inline-block;
 `;
 
-const FilterButton = styled.button``;
+const FilterButton = styled.button`
+  width: 10rem;
+  border: none;
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  display: flex;
+  justify-content: flex-start;
+  font-family: inherit;
+  background-color: ${({ theme }) => theme.headerBackground};
+  color: ${({ theme }) => theme.mainTextColor};
+  box-shadow: 3px 4px 5px 1px rgba(0, 0, 0, 0.1);
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:focus {
+    outline: none;
+  }
+`;
 
 const FilterContent = styled.div`
   position: absolute;
+  border-radius: 5px;
+  top: 120%;
+  background-color: ${({ theme }) => theme.headerBackground};
+  width: 100%;
+  padding: 0.5rem;
+  box-shadow: 3px 4px 5px 1px rgba(0, 0, 0, 0.1);
 `;
 
 const FilterOption = styled.span`
   display: block;
+  color: ${({ theme }) => theme.mainTextColor};
+
+  &:hover {
+    cursor: pointer;
+    font-weight: 600;
+  }
 `;
 
 const PreviewContainer = styled.div`
@@ -71,6 +129,7 @@ const PreviewItemInfoContainer = styled.div`
   display: flex;
   flex-direction: column;
   padding: 1rem;
+  color: ${({ theme }) => theme.mainTextColor};
 `;
 
 const PreviewInfoName = styled.span`
@@ -109,20 +168,30 @@ export default function MainPage({ countries }) {
   return (
     <MainContainer>
       <NavigationContainer>
-        <SearchBar
-          placeholder="Search for a country..."
-          value={searchKeyword}
-          onChange={(e) => setSearchKeyword(e.target.value)}
-        />
+        <SearchBarContainer>
+          <SearchBar
+            placeholder="Search for a country..."
+            value={searchKeyword}
+            onChange={(e) => setSearchKeyword(e.target.value)}
+          />
+          <SearchBarIconContainer>
+            <FontAwesomeIcon icon={faSearch} />
+          </SearchBarIconContainer>
+        </SearchBarContainer>
         <Filter>
-          <FilterButton onClick={() => setFilterVisible(!filterVisible)}>
+          <FilterButton
+            onClick={() => setFilterVisible(!filterVisible)}
+            onBlur={() => setFilterVisible(false)}
+          >
             Filter by region
           </FilterButton>
           {filterVisible && (
             <FilterContent>
-              <FilterOption onClick={setFilterHandler}>America</FilterOption>
               <FilterOption onClick={setFilterHandler}>Africa</FilterOption>
+              <FilterOption onClick={setFilterHandler}>America</FilterOption>
+              <FilterOption onClick={setFilterHandler}>Asia</FilterOption>
               <FilterOption onClick={setFilterHandler}>Europe</FilterOption>
+              <FilterOption onClick={setFilterHandler}>Oceania</FilterOption>
             </FilterContent>
           )}
         </Filter>
